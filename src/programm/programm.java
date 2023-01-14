@@ -51,7 +51,7 @@ public class Programm extends User {
             while(scan.hasNextLine()) {
                 String str = scan.nextLine();
                 String[] params = str.split(" ");
-                if (login.equals(params[0]) && password.equals(params[1])) {
+                if (login.equals(params[1]) && password.equals(params[2])) {
                     System.out.println("Вы вошли в систему как " + login + ".");
                     break;
                 }
@@ -83,7 +83,7 @@ public class Programm extends User {
 
                     // запись по символам
                     writer.append('\n');
-                    writer.append(login + "" + password + "\n");
+                    writer.append("Логин: " + login + "" + password + "\n");
                     writer.append("Id: " + id + "\n");
 
 
