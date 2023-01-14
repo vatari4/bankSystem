@@ -2,6 +2,7 @@ package programm.java;
 
 import user.User;
 
+import javax.swing.*;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -41,54 +42,49 @@ public class Programm extends User {
         System.out.println("Do u have acc in Tinkoff \n yes or no");
         String answer = scanner.nextLine().toLowerCase();
         if (answer.equals("yes") && answer.isEmpty() == false) {
-            System.out.println("Wats ur login");
+            //---------------------//
+            FileReader fr = new FileReader (path);
+            Scanner scan = new Scanner(fr);
+            System.out.println("Input ur login");
             String login = scanner.nextLine().toLowerCase();
+            System.out.println("Input ur password");
+            String password = scanner.nextLine();
+            while(scan.hasNextLine()) {
+                String str = scan.nextLine();
+                String[] params = str.split(" ");
+                if (login.equals(params[0]) && password.equals(params[1])) {
+                    System.out.println("Вы вошли в систему как " + login + ".");
+                    break;
+                }
+                else if (!scan.hasNextLine())
+                    System.out.println("Логин или пароль не корректны.");
+            }
             if (login.isEmpty()) {
                 System.out.println("Login is Empty");
-
             }
-            this.user.setLogin(login);
-            try {
-                //чтение построчно
-                String s;
-                while ((s = br.readLine()) != null) {
-                    if (s.contains(login)) {
-                        System.out.println("Input ur password");
-                        String password = scanner.nextLine().toLowerCase();
-                        if (s.contains(password)) {
-                            System.out.println("Welcome " + login); //добавить *name пользователя
-                        } else {
-                            System.out.println("Wrong Password");
-                        }
-                    } else {
-                        System.out.println("User is not found");
-                    }
-                }
-            } catch (IOException ex) {
+        }
+        /*this.user.setLogin(login);*/
+        else if (answer.equals("no")) {
 
-                System.out.println();
-            }
-        } else if (answer.equals("no")) {
             System.out.println("U need registration? \n yes or no");
             String registration = scanner.nextLine().toLowerCase();
             if (registration.equals("yes")) {
                 System.out.println("Input ur login");
                 String login = scanner.nextLine().toLowerCase();
                 System.out.println("Input ur password");
-                String password = scanner.nextLine().toLowerCase();
+                String password = scanner.nextLine();
                 try (FileWriter writer = new FileWriter(path, true))  //true - записывает поверх, false - перезапись
                 {
-                    String s;
-                    while ((s = br.readLine()) != null) {
-                        if (s.contains("Логин") == true) {
+                    String s1;
+                    while ((s1 = br.readLine()) != null) {
+                        if (s1.contains("Логин") == true) {
                             id++;
                         }
                     }
 
                     // запись по символам
                     writer.append('\n');
-                    writer.append("Логин: " + login + "\n");
-                    writer.append("Пароль: " + password + "\n");
+                    writer.append(login + "" + password + "\n");
                     writer.append("Id: " + id + "\n");
 
 
@@ -146,7 +142,6 @@ public class Programm extends User {
 
     }
 }
-
 
 
 
