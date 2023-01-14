@@ -10,6 +10,8 @@ import java.io.*;
 
 public class Programm extends User {
     String path = "C:\\path.txt";//путь
+    int id = 1;
+
 
     private User user;
 
@@ -32,6 +34,7 @@ public class Programm extends User {
 
     public void Unit() throws IOException {
         Scanner scanner = new Scanner(System.in);
+        BufferedReader br = new BufferedReader(new FileReader(path));
 
 
         int id = 0;
@@ -45,12 +48,21 @@ public class Programm extends User {
 
             }
             this.user.setLogin(login);
-            try (BufferedReader br = new BufferedReader(new FileReader(path))) {
+            try {
                 //чтение построчно
                 String s;
                 while ((s = br.readLine()) != null) {
-
-                    System.out.println(s);
+                    if (s.contains(login)) {
+                        System.out.println("Input ur password");
+                        String password = scanner.nextLine().toLowerCase();
+                        if (s.contains(password)) {
+                            System.out.println("Welcome " + login); //добавить *name пользователя
+                        } else {
+                            System.out.println("Wrong Password");
+                        }
+                    } else {
+                        System.out.println("User is not found");
+                    }
                 }
             } catch (IOException ex) {
 
@@ -64,32 +76,39 @@ public class Programm extends User {
                 String login = scanner.nextLine().toLowerCase();
                 System.out.println("Input ur password");
                 String password = scanner.nextLine().toLowerCase();
-                File file = new File(path);
-                if (!file.exists()) {
+                try (FileWriter writer = new FileWriter(path, true))  //true - записывает поверх, false - перезапись
+                {
+                    String s;
+                    while ((s = br.readLine()) != null) {
+                        if (s.contains("Логин") == true) {
+                            id++;
+                        }
+                    }
 
-                    file.createNewFile();
+                    // запись по символам
+                    writer.append('\n');
+                    writer.append("Логин: " + login + "\n");
+                    writer.append("Пароль: " + password + "\n");
+                    writer.append("Id: " + id + "\n");
 
+
+                    writer.flush();
+                } catch (IOException ex) {
+
+                    System.out.println("ERROR" + ex);
                 }
 
-                PrintWriter pw = new PrintWriter(file);
-
-
-                pw.println(login);
-                pw.println(password);
-                pw.close();
+            } else {
+                System.out.println("have a good day");
             }
-
-        } else {
-            System.out.println("i don't get what u want");
-        }
         /*System.out.println("First Name: ");
         String firstName = scanner.nextLine();
         System.out.println("Middle Name: ");
         String middleName = scanner.nextLine();
         System.out.println("Last Name: ");
         String lastName = scanner.nextLine();*/
-        //нужно создать вывод с балансом - прописать баланс как с именем
-        /*this.user.setUuID(id);*/
+            //нужно создать вывод с балансом - прописать баланс как с именем
+            /*this.user.setUuID(id);*/
 
         /*this.user.setFirstName(firstName);
         this.user.setMiddleName(middleName);
@@ -104,8 +123,8 @@ public class Programm extends User {
 
 
 
-        /*String str = "Mawa";*/
-        /*boolean Logins = login.contains(login);*/
+            /*String str = "Mawa";*/
+            /*boolean Logins = login.contains(login);*/
 
 
 
@@ -122,9 +141,10 @@ public class Programm extends User {
             throw new RuntimeException(e);*/
 
 
+        }
+
+
     }
-
-
 }
 
 
